@@ -2,28 +2,36 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PembelianResource\Pages;
-use App\Filament\Resources\PembelianResource\RelationManagers;
-use App\Models\Pembelian;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Forms\Set;
+use Filament\Forms\Form;
+use App\Models\Pembelian;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\PembelianResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\PembelianResource\RelationManagers;
 
 class PembelianResource extends Resource
 {
     protected static ?string $model = Pembelian::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-banknotes';
+    protected static ?string $label = 'Data Pembelian';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('status')
+                DatePicker::make('tanggal')
+                ->label('Tanggal Pembelian')
+                ->required()
+                ->default(now())->columnSpanFull(),
+                Forms\Components\Select::make('supplier_id')
                     ->options(
                         \App\Models\Supplier::pluck('nama_perusahaan', 'id')
                         )->required()
@@ -33,7 +41,13 @@ class PembelianResource extends Resource
                             \App\Filament\Resources\SupplierResource::getForm(),
                         )->createOptionUsing(function (array $data): int {
                             return \App\Models\Supplier::create($data)->id;
+                        })
+                        ->reactive()
+                        ->afterStateUpdated(Function ($state, Set $set){
+                            $supplier = \App\Models\Supplier::find($state);
+                            $set('email',$supplier->email ?? null);
                         }),
+                        TextInput::make('email')->disabled(),
             ]);
     }
 
