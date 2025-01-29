@@ -2,16 +2,19 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\BarangResource\Pages;
-use App\Filament\Resources\BarangResource\RelationManagers;
-use App\Models\Barang;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Barang;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\BarangResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\BarangResource\RelationManagers;
 
 class BarangResource extends Resource
 {
@@ -24,14 +27,14 @@ class BarangResource extends Resource
     {
         return $form
             ->schema([
-            Forms\Components\TextInput::make('kode')
+            TextInput::make('kode')
                 ->required(),
-            Forms\Components\TextInput::make('nama')
+            TextInput::make('nama')
                 ->label('Nama Barang'),
-            Forms\Components\TextInput::make('stok')
+            TextInput::make('stok')
                 ->disabledOn('edit')
                 ->label('Stok Awal'),
-            Forms\Components\Select::make('satuan')
+            Select::make('satuan')
                 ->options([
                 'pcs' => 'Pcs',
                 'lusin' => 'Lusin',
@@ -44,10 +47,10 @@ class BarangResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('kode')->searchable(),
-                Tables\Columns\TextColumn::make('nama')->searchable(),
-                Tables\Columns\TextColumn::make('stok')->searchable(),
-                Tables\Columns\TextColumn::make('satuan'),
+                TextColumn::make('kode')->searchable(),
+                TextColumn::make('nama')->searchable(),
+                TextColumn::make('stok')->searchable(),
+                TextColumn::make('satuan'),
             ])
             ->filters([
                 //

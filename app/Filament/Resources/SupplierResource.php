@@ -20,10 +20,9 @@ class SupplierResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     protected static ?string $label = 'Data Supplier';
 
-    public static function form(Form $form): Form
-    {
-        return $form
-        ->schema([
+    public static function getForm(){
+
+        return[
             Forms\Components\TextInput::make('nama_perusahaan'),
             Forms\Components\TextInput::make('nama')
             ->label('Nama Kontak')
@@ -36,7 +35,16 @@ class SupplierResource extends Resource
             ->type('email'),
             Forms\Components\TextArea::make('alamat')
             ->columnSpanFull(),
-            ]);
+        ];
+
+    }
+
+    public static function form(Form $form): Form
+    {
+        return $form
+        ->schema(
+            self::getForm()
+        );
     }
 
     public static function table(Table $table): Table
@@ -48,7 +56,6 @@ class SupplierResource extends Resource
                 Tables\Columns\TextColumn::make('no_hp')->label('Nomor Handphone'),
                 Tables\Columns\TextColumn::make('email')->searchable(),
                 Tables\Columns\TextColumn::make('alamat')->searchable(),
-                Tables\Columns\TextColumn::make('alamat2')->searchable(),
             ])
             ->filters([
                 //
