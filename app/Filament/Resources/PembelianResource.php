@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use App\Models\Pembelian;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\DatePicker;
 use Illuminate\Database\Eloquent\Builder;
@@ -55,7 +56,11 @@ class PembelianResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('supplier.nama_perusahaan')
+                ->label('Nama Supplier'),
+                TextColumn::make('supplier.nama')
+                ->label('Nama Penghubung'),
+                TextColumn::make('tanggal')->dateTime('d F Y')->label('Tanggal Pembelian'),
             ])
             ->filters([
                 //
